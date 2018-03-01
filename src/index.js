@@ -50,7 +50,7 @@ class SmartCalculator {
       rez = leftVal + rightVal;
     }else if(operation == '-'){
       rez = leftVal - rightVal;
-    }else if(operation === '^'){
+    }else if(operation == '^'){
       rez = Math.pow(leftVal, rightVal)
     }
     
@@ -61,12 +61,13 @@ class SmartCalculator {
 
 
   calculate(){
-
+    console.log(this.values);
     while(true){
       let operator_pos = 0;
       if(this.values.indexOf('^') != -1){
         operator_pos = this.values.indexOf('^');
         this.matematicOperation('^', operator_pos);
+        console.log(this.values)
       }else break;
     }
         
@@ -75,6 +76,7 @@ class SmartCalculator {
       if(this.values.indexOf('*') != -1){
         operator_pos = this.values.indexOf('*');
         this.matematicOperation('*', operator_pos);
+        console.log(this.values)
       }else break;
     }
 
@@ -88,19 +90,21 @@ class SmartCalculator {
 
     while(true){
       let operator_pos = 0;
-      if(this.values.indexOf('+') != -1){
-        operator_pos = this.values.indexOf('+');
-        this.matematicOperation('+', operator_pos);
-      }else break;
-    }
-
-    while(true){
-      let operator_pos = 0;
       if(this.values.indexOf('-') != -1){
         operator_pos = this.values.indexOf('-');
         this.matematicOperation('-', operator_pos);
       }else break;
     }
+
+    while(true){
+      let operator_pos = 0;
+      if(this.values.indexOf('+') != -1){
+        operator_pos = this.values.indexOf('+');
+        this.matematicOperation('+', operator_pos);
+        console.log(this.values)
+      }else break;
+    }
+
 
     return this.values;
   }
@@ -118,7 +122,20 @@ class SmartCalculator {
 
 module.exports = SmartCalculator;
 
-//calculator = new SmartCalculator(10);
-//const value = calculator.add(5).add(-2).multiply(2).pow(2);
+/*
+calculator = new SmartCalculator(9);
+const value = calculator
+.multiply(1)
+.subtract(73)
+.pow(2)
+.add(62)
+.multiply(1)
+.add(29)
+.add(60)
+.subtract(8)
+.subtract(83)
+.add(50);
+  
 
-//console.log(value.toString());
+console.log(value.toString());
+*/
