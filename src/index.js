@@ -1,12 +1,10 @@
 class SmartCalculator {
   constructor(initialValue) {
     this.values = [];
-    this.count = 0;
     this.values.push(initialValue); 
   }
 
   add(number) {
-    // your implementation
     this.values.push('+'); 
     this.values.push(number); 
     return this;
@@ -36,10 +34,19 @@ class SmartCalculator {
     return this;
   }
 
+  changeArray(operator_pos, rez){
+    this.values.splice(operator_pos + 1, 1);
+    this.values.splice(operator_pos, 1, rez);
+    this.values.splice(operator_pos - 1, 1);
+  }
+
   matematicOperation(operation, operator_pos){
+
     let tmp = this.values.slice((operator_pos - 1), (operator_pos + 2));
     let leftVal = tmp[0];
     let rightVal = tmp[2];
+    let powTrigger = false;
+
 
     let rez = 0;
     if(operation == '*'){
@@ -51,60 +58,45 @@ class SmartCalculator {
     }else if(operation == '-'){
       rez = leftVal - rightVal;
     }else if(operation == '^'){
+      var arrPow = [];
+
+      for (let index = 0; index < this.values.length; index++) {
+        if(this.values[index] == '^') arrPow.push(this.values[index])
+      }
+
+      if(arrPow.length > 1){
+        this.values.reverse();
+        operator_pos = this.values.indexOf('^');
+        tmp = this.values.slice((operator_pos - 1), (operator_pos + 2));
+
+        rez = Math.pow(tmp[2], tmp[0])
+        this.changeArray(operator_pos, rez);
+        this.values.reverse();
+        
+        powTrigger = true;
+      }
+    
       rez = Math.pow(leftVal, rightVal)
     }
+
+    if(!powTrigger){
+      this.changeArray(operator_pos, rez);
+    }
     
-    this.values.splice(operator_pos + 1, 1);
-    this.values.splice(operator_pos, 1, rez);
-    this.values.splice(operator_pos - 1, 1);
   }
 
 
   calculate(){
-    console.log(this.values);
-    while(true){
-      let operator_pos = 0;
-      if(this.values.indexOf('^') != -1){
-        operator_pos = this.values.indexOf('^');
-        this.matematicOperation('^', operator_pos);
-        console.log(this.values)
-      }else break;
-    }
-        
-    while(true){
-      let operator_pos = 0;
-      if(this.values.indexOf('*') != -1){
-        operator_pos = this.values.indexOf('*');
-        this.matematicOperation('*', operator_pos);
-        console.log(this.values)
-      }else break;
-    }
+    let operations = {1 : '^', 2 : '*', 3 : '/', 4 : '-', 5 : '+' };
 
-    while(true){
-      let operator_pos = 0;
-      if(this.values.indexOf('/') != -1){
-        operator_pos = this.values.indexOf('/');
-        this.matematicOperation('/', operator_pos);
-      }else break;
+    for (const key in operations) {
+      while(true){
+        if(this.values.indexOf(operations[key]) != -1){
+          let operator_pos = this.values.indexOf(operations[key]);
+          this.matematicOperation(operations[key], operator_pos);
+        }else break;
+      }
     }
-
-    while(true){
-      let operator_pos = 0;
-      if(this.values.indexOf('-') != -1){
-        operator_pos = this.values.indexOf('-');
-        this.matematicOperation('-', operator_pos);
-      }else break;
-    }
-
-    while(true){
-      let operator_pos = 0;
-      if(this.values.indexOf('+') != -1){
-        operator_pos = this.values.indexOf('+');
-        this.matematicOperation('+', operator_pos);
-        console.log(this.values)
-      }else break;
-    }
-
 
     return this.values;
   }
@@ -121,21 +113,3 @@ class SmartCalculator {
 }
 
 module.exports = SmartCalculator;
-
-/*
-calculator = new SmartCalculator(9);
-const value = calculator
-.multiply(1)
-.subtract(73)
-.pow(2)
-.add(62)
-.multiply(1)
-.add(29)
-.add(60)
-.subtract(8)
-.subtract(83)
-.add(50);
-  
-
-console.log(value.toString());
-*/
